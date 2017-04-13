@@ -5,11 +5,14 @@ var app = express();
 var KEY = process.env.SEARCHAPIKEY;
 var CSE = process.env.CSE;
 var API = "https://www.googleapis.com/customsearch/v1?key=" + KEY + "&cx=" + CSE + "&searchType=image&q=";
-var results;
 
+app.get('/:terms?', function (req, res) {
+    var options = API + req.params.terms;
 
-app.get('/:queryTerms?', function (req, res) {
-    const options = API + req.params.queryTerms;
+    if (req.query.offset > 0) {
+        const offset = "&start=" + req.query.offset;
+        options += offset;
+    } 
 
     callback = function(response) {
         var data= '';
